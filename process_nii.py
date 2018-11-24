@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Nov 24 09:54:33 2018
+Created on Sat Nov 24 16:20:53 2018
 
 @author: Sony
 """
 
+import argparse
 import os
 import numpy as np
 from nilearn import plotting, image
 from skimage import data, io, filters, util, color
-os.chdir(str(os.getcwd()))
+curDir = str(os.getcwd()) + '\\'
+
+parser = argparse.ArgumentParser()
+parser.add_argument('convert', type=str)
+args = parser.parse_args()
+niiFile = args.convert
+
 xCrop = [30, 122, 175, 285, 345, 440]
 yCrop = [50, 138, 50, 140, 45, 155]
-niiFile = r'sub-01_func_sub-01_task-letter0backtask_bold.nii'
-jpgFile = r'out.jpg'
-participantsFile = r'participants.tsv'
 
 def nii2jpg(inFile=None, outFile=None, cutCoords = (3, 3, 3), displayMode = 'ortho'):
     epiImage = image.mean_img(inFile)
@@ -44,23 +48,15 @@ def splitAndConvert(inFile=None, outDir='', fileNumber='0', gray=True, xCrop=Non
         np.savetxt(outDir + 'frontalImageR' + fileNumber + '.csv', frontalImage[:,:,0], delimiter=',')
         np.savetxt(outDir + 'frontalImageG' + fileNumber + '.csv', frontalImage[:,:,1], delimiter=',')
         np.savetxt(outDir + 'frontalImageB' + fileNumber + '.csv', frontalImage[:,:,2], delimiter=',')
-        
-def processDataset(healthyDir='Healthy', schizoDir='Schizo'):
-    controlSubjects = {}
-    schizoSubjects = {}
-    with open(participantsFile) as tsvfile:
-        tsvreader = csv.reader(tsvfile, delimiter="\t")
-        for line in tsvreader:
-            if (line[1] == 'SCZ'):
-                schizoSubjects.append(line[0])
-            elif (line[1] == 'CON' or line[1] == 'CON-SIB'):
-                controlSubjects.append(line[0])
-    for subject in healthySubjects:
-        funcFile = r'{}\\func\\{}_func_{}_task-letter0backtask_bold.nii'.format(subject, subject, subject)
-        nii2jpg(inFile = funcFile, outFile = r'{}\{}\{}.jpg'.format(healthyDir, subject, subject))
-        splitAndConvert(inFile=r'{}\\{}\\{}.jpg'.format(healthyDir, subject, subject), r'{}\\{}\\'.format(healthyDir, subject), gray=True, xCrop=xCrop, yCrop=yCrop)
-    for subject in schizoSubjects:
-        funcFile = r'{}\\func\\{}_func_{}_task-letter0backtask_bold.nii'.format(subject, subject, subject)
-        nii2jpg(inFile = funcFile, outFile = r'{}\{}\{}.jpg'.format(schizoDir, subject, subject))
-        splitAndConvert(inFile=r'{}\\{}\\{}.jpg'.format(healthyDir, subject, subject), r'{}\\{}\\'.format(schizoDir, subject), gray=True, xCrop=xCrop, yCrop=yCrop)       
-        
+       
+
+if __name__ == '__main__':
+    if (os.path.isfile(niiFile)):
+        nii2jpg(inFile=niiFile, outFile='{}brain.jpg'.format(curDir))
+        splitAndConvert(inFile='{}brain.jpg'.format(curDir), outDir=curDir, fileNumber='', gray=True, xCrop=xCrop, yCrop=yCrop)
+    else:
+        print ('Incorrect file path')
+    
+    
+#xCrop = [30, 122, 175, 285, 345, 440]
+#yCrop = [50, 138, 50, 140, 45, 155]
