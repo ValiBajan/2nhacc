@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 os.chdir(dir_path)
+import brainAnalyze
 xCrop = [30, 122, 175, 285, 345, 440]
 yCrop = [50, 138, 50, 140, 45, 155]
 
@@ -49,7 +50,7 @@ class Browse(tk.Frame):
         #niiFile = os.path.relpath(niiFile)
         #niiFile = os.path.relpath(niiFile)
         print(self.filepath)
-        self.filepath = os.path.relpath(self.filepath)ss
+        self.filepath = os.path.relpath(self.filepath)
         if (os.path.isfile(self.filepath)):
             process_nii.nii2jpg(inFile=self.filepath, outFile='brain.jpg')
             process_nii.splitAndConvert(inFile='brain.jpg', fileNumber='', gray=True, xCrop=xCrop, yCrop=yCrop)
@@ -57,11 +58,11 @@ class Browse(tk.Frame):
             print ('Incorrect file path')
             
     def new_window(self):
-        self._top = tk.Toplevel()
+        #self._top = tk.Toplevel()
         self._img = ImageTk.PhotoImage(Image.open('brain.jpg'))
         self._imgLabel = tk.Label(self, image=self._img)
         self._imgLabel.pack(side='bottom', fill='both', expand='yes')
-        self._resLabel = tk.Label(self, text='Probabilitate schizofrenie: 100%')
+        self._resLabel = tk.Label(self, text='Probabilitate schizofrenie: {}%'.format(brainAnalyze.analyze('topImageGray.csv')))
         self._resLabel.pack(side='bottom', fill='both', expand='yes')
         
 
