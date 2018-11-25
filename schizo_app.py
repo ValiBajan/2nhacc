@@ -54,7 +54,7 @@ class Browse(tk.Frame):
 if __name__ == "__main__": 
     root = tk.Tk()
     root.title("Schiz")
-    root.geometry("500x300")
+    root.geometry("500x400")
     root.iconbitmap('icon.ico')
     file_browser = Browse(root, initialdir=str(os.getcwd()))
     file_browser.pack(fill='x', expand=True)
