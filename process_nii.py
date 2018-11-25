@@ -5,18 +5,12 @@ Created on Sat Nov 24 16:20:53 2018
 @author: Sony
 """
 
-import argparse
 import os
 import numpy as np
 from nilearn import plotting, image
 from skimage import data, io, filters, util, color
 curDir = str(os.getcwd()) + '\\'
-
-parser = argparse.ArgumentParser()
-parser.add_argument('convert', type=str)
-args = parser.parse_args()
-niiFile = args.convert
-
+os.chdir('C:\\')
 xCrop = [30, 122, 175, 285, 345, 440]
 yCrop = [50, 138, 50, 140, 45, 155]
 
@@ -50,12 +44,12 @@ def splitAndConvert(inFile=None, outDir='', fileNumber='0', gray=True, xCrop=Non
         np.savetxt(outDir + 'frontalImageB' + fileNumber + '.csv', frontalImage[:,:,2], delimiter=',')
        
 
-if __name__ == '__main__':
-    if (os.path.isfile(niiFile)):
-        nii2jpg(inFile=niiFile, outFile='{}brain.jpg'.format(curDir))
-        splitAndConvert(inFile='{}brain.jpg'.format(curDir), outDir=curDir, fileNumber='', gray=True, xCrop=xCrop, yCrop=yCrop)
-    else:
-        print ('Incorrect file path')
+#if __name__ == '__main__':
+#    if (os.path.isfile(niiFile)):
+#        nii2jpg(inFile=niiFile, outFile='{}brain.jpg'.format(curDir))
+#        splitAndConvert(inFile='{}brain.jpg'.format(curDir), outDir=curDir, fileNumber='', gray=True, xCrop=xCrop, yCrop=yCrop)
+#    else:
+#        print ('Incorrect file path')
     
     
 #xCrop = [30, 122, 175, 285, 345, 440]
