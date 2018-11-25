@@ -16,6 +16,7 @@ class Browse(tk.Frame):
         
         super().__init__(master)
         self.filepath = tk.StringVar()
+        self.checker = 0
         self._initaldir = initialdir
         self._filetypes = filetypes
         
@@ -26,21 +27,26 @@ class Browse(tk.Frame):
         self._button.pack()
         #back.pack()
         
+        
     def browse(self):
         self.filepath = askopenfilename(filetypes=(("MRI Scan", "*.nii"),
                                              ("All files", "*.*") ))
+        self.checker = 1 
 
     def analyze(self):
         #os.chdir('C:/2NHack/Dataset/')
         #niiFile = os.path.relpath(niiFile)
         #niiFile = os.path.relpath(niiFile)
-        self.filepath = os.path.relpath(self.filepath)
-        if (os.path.isfile(self.filepath)):
-            process_nii.nii2jpg(inFile=self.filepath, outFile='brain.jpg')
-            process_nii.splitAndConvert(inFile='brain.jpg', fileNumber='', gray=True, xCrop=xCrop, yCrop=yCrop)
-        else:
-            print ('Incorrect file path')
-        self.new_window()
+        if self.checker:
+            self.filepath = os.path.relpath(self.filepath)
+            if (os.path.isfile(self.filepath)):
+                process_nii.nii2jpg(inFile=self.filepath, outFile='brain.jpg')
+                process_nii.splitAndConvert(inFile='brain.jpg', fileNumber='', gray=True, xCrop=xCrop, yCrop=yCrop)
+                self.checker = 0
+            else:
+                print ('Incorrect file path')
+            self.new_window()
+            
             
     def new_window(self):
         self._img = ImageTk.PhotoImage(Image.open('brain.jpg'))
